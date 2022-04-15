@@ -35,14 +35,23 @@ contract AuroraMultiSend {
         auroraFoundation = _auroraFoundation;
     }
 
-    /* ======== CORE FUNCTIONS ========= */
+    /* ======== DEPOSIT / WITHDRAW ========= */
 
     // @notice Allows the foundation to deposit aurora tokens 
-    // @param _amount Amount of aurora tokens to deposit
+    // @param _amount Amount to deposit
     function depositAuroraTokens(uint256 _amount) external onlyFoundation {
         require(aurora.balanceOf(msg.sender) >= _amount, "Specified amount > wallet balance");
         aurora.transferFrom(msg.sender, address(this), _amount);
     }
+
+    // @notice Allows the foundation to withdraw aurora tokens
+    // @param _amount Amount to withdraw
+    function withdrawAuroraTokens(uint256 _amount) external onlyFoundation {
+        require(auroraBalance() >= _amount, "Specified amount > contract balance");
+        aurora.transfer(msg.sender, _amount);
+    }
+
+    /* ======== MUTLISEND ========= */
 
     // @notice Distributes the current balance of aurora tokens in the contract to the specified addresses
     // @param _addresses An array of addresses containing the recipients of the aurora tokens
@@ -60,7 +69,7 @@ contract AuroraMultiSend {
         }
     }
 
-    /* ======== HELPER FUNCTIONS ======== */
+    /* ======== HELPER FUNCTION ======== */
 
     function auroraBalance() external view returns (uint256) {
         return aurora.balanceOf(address(this));
