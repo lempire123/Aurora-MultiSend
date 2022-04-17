@@ -30,7 +30,7 @@ contract AuroraMultiSend {
     address[] investors;
 
     // Percentage of aurora tokens corresponding to each investor
-    // ie. Investor[i] gets percentages[i] percentage
+    // ie. Investor[i] gets percentages[i] percentage (percentages are out of 1000)
     uint256[] percentages;
 
 
