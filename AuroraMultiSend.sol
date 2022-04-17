@@ -62,7 +62,7 @@ contract AuroraMultiSend {
      // @param _addresses An array of addresses containing the recipients of the aurora tokens
     // @param _percentages An array of uints representing the percentage of aurora tokens corresponding to each address
     // @dev Eg. _addresses[0] will receive _percentages[0] percentage of the total aurora balance
-    function init(address[] _addresses, uint256[] _percentages) external onylFoundation {
+    function init(address[] memory _addresses, uint256[] memory _percentages) public onlyFoundation {
         require(initialized == false, "Contract already initialized");
         require(checkSum(_percentages), "Sum of percentages must not be greater than 1000"); // 1000 allows for 1 decimal place
         require(_addresses.length == _percentages.length, "Length of arrays must be equal");
@@ -85,7 +85,7 @@ contract AuroraMultiSend {
 
     // @notice Allows the foundation to deposit aurora tokens 
     // @param _amount Amount to deposit
-    function depositAuroraTokens(uint256 _amount) external onlyFoundation {
+    function depositAuroraTokens(uint256 _amount) public onlyFoundation {
         require(aurora.balanceOf(msg.sender) >= _amount, "Specified amount > wallet balance");
         aurora.transferFrom(msg.sender, address(this), _amount);
     }
@@ -106,23 +106,23 @@ contract AuroraMultiSend {
     /* ======== MUTLISEND ========= */
 
     // @notice Distributes the current balance of aurora tokens in the contract to the specified addresses
-    function multiSend() external onlyFoundation isInitialized {
+    function multiSend() public onlyFoundation isInitialized {
         uint256 totalBalance = auroraBalance();
         
         for(uint i; i < investors.length; i++) {
-             aurora.transfer(_addresses[i], totalBalance.mul(percentages[i]).div(1000)); // Assumes percentages range from 0-100
+             aurora.transfer(investors[i], totalBalance.mul(percentages[i]).div(1000)); // Assumes percentages range from 0-100
         }
     }
 
     /* ======== HELPER FUNCTIONS ======== */
 
     // Check aurora balance of the contract
-    function auroraBalance() external view returns (uint256) {
+    function auroraBalance() public view returns (uint256) {
         return aurora.balanceOf(address(this));
     }
 
     // Checks that the sum of the array is <= 100
-    function checkSum(uint256[] _array) external view returns (bool) {
+    function checkSum(uint256[] memory _array) public pure returns (bool) {
         uint256 sum = 0;
         for (uint i = 0; i < _array.length; i++) {
             sum += _array[i];
@@ -131,12 +131,12 @@ contract AuroraMultiSend {
     }
 
     // Returns list of investors
-    function getInvestors() external view returns (address[]) {
+    function getInvestors() external view returns (address[] memory) {
         return investors;
     }
 
     // Returns list of percentages
-    function getPercentages() external view returns (uint256[]) {
+    function getPercentages() external view returns (uint256[] memory) {
         return percentages;
     }
 
@@ -144,8 +144,8 @@ contract AuroraMultiSend {
 
     // Allows foundation to change the list of investor addresses/percentages
     function updateInvestorList(
-        address[] _addresses, 
-        uint256[] _percentages) 
+        address[] memory _addresses, 
+        uint256[] memory _percentages) 
     external onlyFoundation isInitialized {
         initialized = false;
         init(_addresses, _percentages);
