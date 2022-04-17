@@ -7,7 +7,7 @@ to multiple investors.
 
 _**How does the contract work?**_
 
-Allows the aurora foundation to register a number of addresses and the corresponding
+The contract allows the aurora foundation to register a number of addresses and the corresponding
 percentage of aurora tokens they are entitled to. The foundation can then deposit aurora
 tokens into the contract, which will distribute them to the investors according to their
 share.
