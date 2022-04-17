@@ -30,7 +30,7 @@ contract AuroraMultiSend {
     address[] investors;
 
     // Percentage of aurora tokens corresponding to each investor
-    // ie. Investor[i] gets percentages[i] percentage (percentages are out of 1000)
+    // ie. Investor[i] gets percentages[i] percentage
     uint256[] percentages;
 
 
@@ -110,7 +110,7 @@ contract AuroraMultiSend {
         uint256 totalBalance = auroraBalance();
         
         for(uint i; i < investors.length; i++) {
-             aurora.transfer(investors[i], totalBalance.mul(percentages[i]).div(1000)); // Assumes percentages range from 0-100
+             aurora.transfer(investors[i], totalBalance.mul(percentages[i]).div(1000)); // Assumes percentages range from 0-1000
         }
     }
 
@@ -140,7 +140,7 @@ contract AuroraMultiSend {
         return percentages;
     }
 
-    /* ======== EDIT LIST OF INVESTORS ======= */
+    /* ======== MUTATIVE FUNCTIONS ======= */
 
     // Allows foundation to change the list of investor addresses/percentages
     function updateInvestorList(
@@ -151,4 +151,8 @@ contract AuroraMultiSend {
         init(_addresses, _percentages);
     }
 
+    // Changes the address of aurora Foundation
+    function setAuroraFoundation(address _foundation) external onlyFoundation {
+        auroraFoundation = _foundation;
+    }
 }
