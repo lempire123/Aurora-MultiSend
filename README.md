@@ -9,9 +9,9 @@ _**How does the contract work?**_
 
 - Aurora Foundation calls the "multisend" function with
   the following parameters :
-  - Array of addresses (contains the recipients of the aurora tokens)
-  - Array of number (contains the amount of aurora each address should receive)
-  - Sum (the total number of aurora tokens to distribute 
+  - **Recipients** (contains the recipients of the aurora tokens)
+  - **Amounts** (contains the amount of aurora each address should receive)
+  - **Sum** (the total number of aurora tokens to distribute 
 
 - The function will make a few checks to makes sure all parameters have been  
   entered correctly, loops through the array of addresses, and sends the 
