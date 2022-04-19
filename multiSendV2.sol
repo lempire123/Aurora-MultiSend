@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/math/SafeMath.sol";
 
 /**
 @title Aurora MultiSend Contract
@@ -13,6 +14,7 @@ multiple addresses in a single transaction.
 */
 
 contract MultiSend {
+    using SafeMath for uint256;
 
      /* ======= STATE VARIABLES ======= */
 
@@ -54,28 +56,11 @@ contract MultiSend {
         require(calculateSum(_amounts) == _sum, "Sum of amounts != Total sum");
         require(underlying.balanceOf(msg.sender) >= _sum, "Wallet balance not sufficient");
 
-        underlying.transferFrom(msg.sender, address(this), _sum);
-
         for(uint i; i < _recipients.length; i++) {
             require(_recipients[i] != address(0), "Invalid Address");
             require(_amounts[i] > 0, "Invalid Percentage");
             
-            underlying.transfer(_recipients[i], _amounts[i]);
-        }
-    }
-
-    // @notice Does the same as the function above except it assumes tokens 
-    // have already been deposited and so don't need to be pulled from msg.sender
-    function _multiSend(address[] memory _recipients, uint256[] memory _amounts, uint256 _sum) external onlyAdmin {
-        require(_recipients.length == _amounts.length, "Array lengths must be equal");
-        require(calculateSum(_amounts) == _sum, "Sum of amounts != Total sum");
-        require(underlying.balanceOf(address(this)) >= _sum, "Contract balance not sufficient");
-
-        for(uint i; i < _recipients.length; i++) {
-            require(_recipients[i] != address(0), "Invalid Address");
-            require(_amounts[i] > 0, "Invalid Percentage");
-            
-            underlying.transfer(_recipients[i], _amounts[i]);
+            underlying.transferFrom(msg.sender, _recipients[i], _amounts[i].mul(1));
         }
     }
 
@@ -85,7 +70,7 @@ contract MultiSend {
     function calculateSum(uint256[] memory _array) public pure returns (uint256) {
         uint256 sum = 0;
         for (uint i = 0; i < _array.length; i++) {
-            sum += _array[i];
+            sum.add(_array[i]);
         }
         return sum;
     }
