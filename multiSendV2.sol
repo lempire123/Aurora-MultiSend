@@ -50,7 +50,7 @@ contract MultiSend {
     // @param _amounts The corresponding amount of underlying each address will receive
     // @param _sum Total sum of underlying to distribute
     // Eg. _recipients[i] will recieve _amounts[i] of underlying
-    function multiSend(address[] _recipients, uint256[] _amounts, uint256 _sum) external onlyAdmin {
+    function multiSend(address[] memory _recipients, uint256[] memory _amounts, uint256 _sum) external onlyAdmin {
         require(_recipients.length == _amounts.length, "Array lengths must be equal");
         require(checkSum(_amounts) == _sum, "Sum of amounts != Total sum");
         require(underlying.balanceOf(msg.sender) >= _sum, "Wallet balance not sufficient");
