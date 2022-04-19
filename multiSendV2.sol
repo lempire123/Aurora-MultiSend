@@ -2,7 +2,6 @@
 pragma solidity ^0.8.0;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol";
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/math/SafeMath.sol";
 
 /**
 @title Aurora MultiSend Contract
@@ -52,7 +51,7 @@ contract MultiSend {
     // Eg. _recipients[i] will recieve _amounts[i] of underlying
     function multiSend(address[] memory _recipients, uint256[] memory _amounts, uint256 _sum) external onlyAdmin {
         require(_recipients.length == _amounts.length, "Array lengths must be equal");
-        require(checkSum(_amounts) == _sum, "Sum of amounts != Total sum");
+        require(calculateSum(_amounts) == _sum, "Sum of amounts != Total sum");
         require(underlying.balanceOf(msg.sender) >= _sum, "Wallet balance not sufficient");
 
         underlying.transferFrom(msg.sender, address(this), _sum);
@@ -69,7 +68,7 @@ contract MultiSend {
     /* ======== HELPER FUNCTION ======== */
 
     // Calculates and returns the sum of the array
-    function checkSum(uint256[] memory _array) public pure returns (uint256) {
+    function calculateSum(uint256[] memory _array) public pure returns (uint256) {
         uint256 sum = 0;
         for (uint i = 0; i < _array.length; i++) {
             sum += _array[i];
