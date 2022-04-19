@@ -59,7 +59,7 @@ contract MultiSend {
             require(_recipients[i] != address(0), "Invalid Address");
             require(_amounts[i] > 0, "Invalid Percentage");
             
-             // Multliplying amount[i] by 1 ether allows the user to enter small numbers that are easier to read
+             // Multliplying amount[i] by 1 ether allows the admin to enter small numbers that are easier to read
             underlying.transferFrom(msg.sender, _recipients[i], _amounts[i].mul(1 ether));
         }
     }
