@@ -8,7 +8,7 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contr
 @title Aurora MultiSend Contract
 @author Lance Henderson
 
-@notice Contract allows sending Aurora tokens to 
+@notice Contract allows sending any ERC20 token to 
 multiple addresses in a single transaction.
 
 */
