@@ -16,7 +16,7 @@ multiple addresses in a single transaction.
 contract MultiSend {
     using SafeMath for uint256;
 
-     /* ======= STATE VARIABLES ======= */
+    /* ======= STATE VARIABLES ======= */
 
     // Underlying token to distribute
     IERC20 public underlying;
