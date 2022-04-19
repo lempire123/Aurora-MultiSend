@@ -70,7 +70,7 @@ contract MultiSend {
     function calculateSum(uint256[] memory _array) public pure returns (uint256) {
         uint256 sum = 0;
         for (uint i = 0; i < _array.length; i++) {
-            sum.add(_array[i]);
+            sum += (_array[i]);
         }
         return sum;
     }
