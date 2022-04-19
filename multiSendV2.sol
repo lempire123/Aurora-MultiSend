@@ -60,7 +60,7 @@ contract MultiSend {
             require(_recipients[i] != address(0), "Invalid Address");
             require(_amounts[i] > 0, "Invalid Percentage");
             
-            underlying.transferFrom(msg.sender, _recipients[i], _amounts[i].mul(1));
+            underlying.transferFrom(msg.sender, _recipients[i], _amounts[i].mul(1 ether));
         }
     }
 
