@@ -38,7 +38,6 @@ contract MultiSend {
 
     // @param _underlying Token to distribute
     // @param _admin Address with exclusive access
-
     constructor(address _underlying, address _admin) {
         underlying = IERC20(_underlying);
         admin = _admin;
