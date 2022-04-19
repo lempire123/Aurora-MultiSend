@@ -59,6 +59,7 @@ contract MultiSend {
             require(_recipients[i] != address(0), "Invalid Address");
             require(_amounts[i] > 0, "Invalid Percentage");
             
+             // Multliplying amount[i] by 1 ether allows the user to enter small numbers that are easier to read
             underlying.transferFrom(msg.sender, _recipients[i], _amounts[i].mul(1 ether));
         }
     }
@@ -69,7 +70,7 @@ contract MultiSend {
     function calculateSum(uint256[] memory _array) public pure returns (uint256) {
         uint256 sum = 0;
         for (uint i = 0; i < _array.length; i++) {
-            sum += (_array[i]);
+            sum += _array[i];
         }
         return sum;
     }
