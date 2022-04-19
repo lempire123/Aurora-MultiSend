@@ -49,7 +49,7 @@ contract MultiSend {
     // @param _amounts The corresponding amount of underlying each address will receive
     // @param _sum Total sum of underlying to distribute
     // Eg. _recipients[i] will recieve _amounts[i] of underlying
-    function multiSend(address[] memory _recipients, uint256[] memory _amounts, uint256 _sum) external onlyAdmin {
+    function depositAndMultiSend(address[] memory _recipients, uint256[] memory _amounts, uint256 _sum) external onlyAdmin {
         require(_recipients.length == _amounts.length, "Array lengths must be equal");
         require(calculateSum(_amounts) == _sum, "Sum of amounts != Total sum");
         require(underlying.balanceOf(msg.sender) >= _sum, "Wallet balance not sufficient");
@@ -62,7 +62,21 @@ contract MultiSend {
             
             underlying.transfer(_recipients[i], _amounts[i]);
         }
+    }
 
+    // @notice Does the same as the function above except it assumes tokens 
+    // have already been deposited and so don't need to be pulled from msg.sender
+    function _multiSend(address[] memory _recipients, uint256[] memory _amounts, uint256 _sum) external onlyAdmin {
+        require(_recipients.length == _amounts.length, "Array lengths must be equal");
+        require(calculateSum(_amounts) == _sum, "Sum of amounts != Total sum");
+        require(underlying.balanceOf(address(this)) >= _sum, "Contract balance not sufficient");
+
+        for(uint i; i < _recipients.length; i++) {
+            require(_recipients[i] != address(0), "Invalid Address");
+            require(_amounts[i] > 0, "Invalid Percentage");
+            
+            underlying.transfer(_recipients[i], _amounts[i]);
+        }
     }
 
     /* ======== HELPER FUNCTION ======== */
