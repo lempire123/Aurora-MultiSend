@@ -66,8 +66,8 @@ contract MultiSend {
 
     // Calculates and returns the sum of the array
     function calculateSum(uint256[] memory _array) public pure returns (uint256) {
-        uint256 sum = 0;
-        for (uint i = 0; i < _array.length; i++) {
+        uint256 sum;
+        for (uint i; i < _array.length; i++) {
             sum += _array[i];
         }
         return sum;
