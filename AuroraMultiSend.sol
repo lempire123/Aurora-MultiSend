@@ -24,7 +24,6 @@ contract MultiSend {
     // Address of the admin - has exclusive access to certain functions
     address public admin;
     
-
     /* ========= MODIFIER ======== */
 
     // Modifier to ensure caller is admin
@@ -32,7 +31,6 @@ contract MultiSend {
         require(msg.sender == admin, "Access restricted to admin");
         _;
     }
-
 
     /* ======== CONSTRUCTOR ======== */
 
@@ -42,7 +40,6 @@ contract MultiSend {
         underlying = IERC20(_underlying);
         admin = _admin;
     }
-
 
     /* ======== MUTLISEND ========= */
     
