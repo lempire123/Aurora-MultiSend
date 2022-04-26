@@ -18,9 +18,6 @@ contract MultiSend {
 
     /* ======= STATE VARIABLES ======= */
 
-    // Underlying token to distribute
-    IERC20 public underlying;
-
     // Address of the admin - has exclusive access to certain functions
     address public admin;
     
@@ -36,8 +33,7 @@ contract MultiSend {
 
     // @param _underlying Token to distribute
     // @param _admin Address with exclusive access
-    constructor(address _underlying, address _admin) {
-        underlying = IERC20(_underlying);
+    constructor(address _admin) {
         admin = _admin;
     }
 
@@ -47,39 +43,21 @@ contract MultiSend {
     // @param _amounts The corresponding amount of underlying each address will receive
     // @param _sum Total sum of underlying to distribute
     // Eg. _recipients[i] will recieve _amounts[i] of underlying
-    // @dev Amounts are multiplied by 1 ether for readability
-    function multiSend(address[] memory _recipients, uint256[] memory _amounts, uint256 _sum) external onlyAdmin {
+    // @dev Prior to calling multiSend, Sender must give allowance to the contract for transferring the tokens
+    function multiSend(address _underlying, address[] memory _recipients, uint256[] memory _amounts) external onlyAdmin {
         require(_recipients.length == _amounts.length, "Array lengths must be equal");
-        require(calculateSum(_amounts) == _sum, "Sum of amounts != Total sum");
-        require(underlying.balanceOf(msg.sender) >= _sum, "Wallet balance not sufficient");
+
+        IERC20 underlying = IERC20(_underlying);
 
         for(uint i; i < _recipients.length; i++) {
             require(_recipients[i] != address(0), "Invalid Address");
-            require(_amounts[i] > 0, "Invalid Percentage");
+            require(_amounts[i] > 0, "Invalid Amount");
             
-             // Multliplying amount[i] by 1 ether allows the admin to enter small numbers that are easier to read
-            underlying.transferFrom(msg.sender, _recipients[i], _amounts[i].mul(1 ether));
+            underlying.transferFrom(msg.sender, _recipients[i], _amounts[i]);
         }
-    }
-
-    /* ======== HELPER FUNCTION ======== */
-
-    // Calculates and returns the sum of the array
-    function calculateSum(uint256[] memory _array) public pure returns (uint256) {
-        uint256 sum;
-        for (uint i; i < _array.length; i++) {
-            sum += _array[i];
-        }
-        return sum;
     }
 
     /* ====== MUTATIVE FUNCTION ======= */
-
-    // @notice Allows the admin to change the address of the underlying token
-    // @param _underlying Address of the new token
-    function changeUnderlying(address _underlying) external onlyAdmin {
-        underlying = IERC20(_underlying);
-    }
 
     // @notice Allows the admin to change the admin address
     // @param _newAdmin Address of the new admin
